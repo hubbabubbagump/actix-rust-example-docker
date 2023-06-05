@@ -1,6 +1,11 @@
 name: Rust
 
 on:
+  workflow_call:
+    inputs:
+      perform_deploy:
+        required: true
+        type: boolean
   push:
     branches: [ "master" ]
   pull_request:
@@ -19,6 +24,7 @@ jobs:
         export DOCKER_BUILDKIT=1
         docker build .
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Prepare
