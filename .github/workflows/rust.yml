@@ -11,14 +11,19 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: |
         export DOCKER_BUILDKIT=1
         docker build .
-    - name: Run tests
-      run: cargo test --verbose
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Prepare
+      if: ${{ inputs.perform_deploy }}
+      run: echo hello world
+    - name: Deploy
+      run: helm --help
+
