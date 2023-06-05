@@ -1,32 +1,23 @@
-# NB: This is not a production-grade Dockerfile.
+FROM rust:1.69.0 as chef
+RUN cargo install cargo-chef
+WORKDIR /usr/app
 
-#################
-## build stage ##
-#################
-FROM rust:1-slim-bullseye AS builder
-WORKDIR /code
+FROM chef AS planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-# Download crates-io index and fetch dependency code.
-# This step avoids needing to spend time on every build downloading the index
-# which can take a long time within the docker context. Docker will cache it.
-RUN USER=root cargo init
-COPY Cargo.toml Cargo.toml
-RUN cargo fetch
+FROM chef AS builder
+COPY --from=planner /usr/app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
 
-# copy app files
-COPY src src
-
-# compile app
+COPY . .
 RUN cargo build --release
 
-###############
-## run stage ##
-###############
 FROM debian:bullseye-slim
 WORKDIR /app
 
 # copy server binary from build stage
-COPY --from=builder /code/target/release/docker_sample docker_sample
+COPY --from=builder /usr/app/target/release/docker_sample docker_sample
 
 # set user to non-root unless root is required for your app
 USER 1001
@@ -35,4 +26,4 @@ USER 1001
 EXPOSE 8080
 
 # run server
-CMD [ "/app/docker_sample" ]
+CMD [ "/usr/app/docker_sample" ]
