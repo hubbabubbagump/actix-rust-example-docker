@@ -27,8 +27,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - uses: trstringer/manual-approval@v1
     - name: Deploy Prepare
-      uses: trstringer/manual-approval@v1
       run: echo hello world
     - name: Deploy
       run: helm --help
