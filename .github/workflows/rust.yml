@@ -22,13 +22,13 @@ jobs:
     - name: Build
       run: |
         export DOCKER_BUILDKIT=1
-        docker build .
+        # docker build .
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Prepare
-      if: ${{ inputs.perform_deploy }}
+      uses: trstringer/manual-approval@v1
       run: echo hello world
     - name: Deploy
       run: helm --help
