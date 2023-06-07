@@ -1,11 +1,6 @@
 name: Rust
 
 on:
-  workflow_call:
-    inputs:
-      perform_deploy:
-        required: true
-        type: boolean
   push:
     branches: [ "master" ]
   pull_request:
@@ -22,12 +17,14 @@ jobs:
     - name: Build
       run: |
         export DOCKER_BUILDKIT=1
-        # docker build .
+        docker build . \
+        --cache-from type=gha,scope=${{ github.ref }} \
+        --cache-from type=gha,scope=${{ github.base_ref }} \
+        --cache-to type=gha,mode=max,scope=${{ github.ref }}
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: trstringer/manual-approval@v1
     - name: Deploy Prepare
       run: echo hello world
     - name: Deploy

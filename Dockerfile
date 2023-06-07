@@ -1,16 +1,16 @@
-FROM rust:1.69.0 as chef
+FROM rust:1.69.0 as builder
 RUN cargo install cargo-chef
 WORKDIR /usr/app
 
-FROM chef AS planner
-COPY . .
-RUN cargo chef prepare --recipe-path recipe.json
+RUN mkdir -p /usr/app/src
+COPY Cargo.toml Cargo.lock /usr/app/
 
-FROM chef AS builder
-COPY --from=planner /usr/app/recipe.json recipe.json
-RUN cargo chef cook --release --recipe-path recipe.json
+RUN \
+    echo 'fn main() {}' > /sourcedlogs/src/main.rs && \
+    cargo build -p $SERVICE --release && \
+    rm -Rvf /sourcedlogs/src
 
-COPY . .
+COPY src /usr/app/src
 RUN cargo build --release
 
 FROM debian:bullseye-slim
