@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: |
         export DOCKER_BUILDKIT=1
-        docker build . \
+        docker buildx build . \
         --cache-from type=gha,scope=${{ github.ref }} \
         --cache-from type=gha,scope=${{ github.base_ref }} \
         --cache-to type=gha,mode=max,scope=${{ github.ref }}
