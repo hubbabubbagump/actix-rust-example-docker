@@ -7,7 +7,7 @@ COPY Cargo.toml Cargo.lock /usr/app/
 
 RUN \
     echo 'fn main() {}' > /usr/app/src/main.rs && \
-    cargo build -p $SERVICE --release && \
+    cargo build  --release && \
     rm -Rvf /usr/app/src
 
 COPY src /usr/app/src
