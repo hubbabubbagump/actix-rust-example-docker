@@ -6,9 +6,9 @@ RUN mkdir -p /usr/app/src
 COPY Cargo.toml Cargo.lock /usr/app/
 
 RUN \
-    echo 'fn main() {}' > /sourcedlogs/src/main.rs && \
+    echo 'fn main() {}' > /usr/app/src/main.rs && \
     cargo build -p $SERVICE --release && \
-    rm -Rvf /sourcedlogs/src
+    rm -Rvf /usr/app/src
 
 COPY src /usr/app/src
 RUN cargo build --release
