@@ -33,6 +33,12 @@ jobs:
         cache-from: type=gha,src=/tmp/.buildx-cache
         cache-to: type=gha,dest=/tmp/.buildx-cache-new
   deploy:
+    strategy:
+      matrix:
+        target:
+          - service: test1
+          - service: test2
+          - service: test3
     needs: build
     runs-on: ubuntu-latest
     steps:
