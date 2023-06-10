@@ -43,7 +43,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Prepare
-      run: echo hello world
+      run: echo ${{ github.ref }} > test.txt
+    - name: Wait
+      run: sleep 10
+    - name: Print
+      run: cat test.txt
     - name: Deploy
       run: helm --help
 
