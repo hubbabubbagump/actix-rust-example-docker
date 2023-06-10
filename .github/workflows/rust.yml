@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: Swatinem/rust-cache@v2
+      with:
+        key: cache-${{ hashFiles("**/Cargo.lock") }}
     - name: Test
       run: cargo test
     - name: Set up Docker Buildx
@@ -32,8 +35,8 @@ jobs:
       with:
         context: .
         push: false
-        cache-from: type=gha,src=/tmp/.buildx-cache
-        cache-to: type=gha,dest=/tmp/.buildx-cache-new
+        cache-from: type=gha,src=/tmp/.buildx-cache-${{ hashFiles("**/Cargo.lock") }}
+        cache-to: type=gha,dest=/tmp/.buildx-cache-${{ hashFiles("**/Cargo.lock") }}
   deploy:
     strategy:
       matrix:
