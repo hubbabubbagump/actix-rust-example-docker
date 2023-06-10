@@ -47,7 +47,6 @@ jobs:
     steps:
     - name: Deploy Prepare
       run: |
-        cat test.txt
         echo ${{ matrix.path }}
         echo ${{ matrix.service }} > test.txt
     - name: Wait
