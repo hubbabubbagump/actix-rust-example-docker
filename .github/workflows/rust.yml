@@ -35,10 +35,7 @@ jobs:
   deploy:
     strategy:
       matrix:
-        target:
-          - service: test1
-          - service: test2
-          - service: test3
+        service: ["test1", "test2", "test3"]
     needs: build
     runs-on: ubuntu-latest
     steps:
