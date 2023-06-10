@@ -35,12 +35,21 @@ jobs:
   deploy:
     strategy:
       matrix:
-        service: ["test1", "test2", "test3"]
+        include:
+        - service: "test1"
+          path: "src/test1"
+        - service: "test2"
+          path: "src/test2"
+        - service: "test3"
+          path: "src/test3"
     needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Prepare
-      run: echo ${{ matrix.service }} > test.txt
+      run: |
+        cat test.txt
+        echo ${{ matrix.path }}
+        echo ${{ matrix.service }} > test.txt
     - name: Wait
       run: sleep 10
     - name: Print
