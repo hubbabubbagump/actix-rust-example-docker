@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Deploy Prepare
-      run: echo ${{ github.ref }} > test.txt
+      run: echo ${{ matrix.service }} > test.txt
     - name: Wait
       run: sleep 10
     - name: Print
